@@ -3,12 +3,13 @@ import java.util.function.Function;
 import java.util.function.IntPredicate;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 public class FizzBuzz {
   public static void main(String[] args) {
-    CheckList checkList = new CheckList();
+    final CheckList checkList = new CheckList();
     checkList.add("Fizz", n -> n % 3 == 0);
     checkList.add("Buzz", n -> n % 5 == 0);
     // checkList.add("Xezz", n -> n % 7 == 0);
@@ -37,7 +38,7 @@ class CheckList {
       .flatMap(wp -> wp.pred().test(n) ? Stream.of(wp.word()) : Stream.empty())
       .collect(OptBuilder::new, OptBuilder::accumulate, OptBuilder::combine)
       .get().map(StringBuilder::toString)
-      .orElse(Integer.valueOf(n).toString());
+      .orElse(String.valueOf(n));
   }
 }
 
@@ -62,3 +63,37 @@ class OptBuilder {
     return this;
   }
 }
+
+/*
+class OptBuilder {
+  private StringBuilder builder;
+  private Boolean isEmpty = true;
+
+  public Optional<StringBuilder> get() {
+    return this.isEmpty ? Optional.empty() : Optional.of(this.builder);
+  }
+
+  public OptBuilder accumulate(String str) {
+    if (this.isEmpty) {
+      this.builder = (new StringBuilder()).append(str);
+      this.isEmpty = false;
+    } else {
+      this.builder.append(str);
+    }
+    return this;
+  }
+
+  public OptBuilder combine(OptBuilder ob2) {
+    final Optional<StringBuilder> optBuilder2 = ob2.get();
+    if (this.isEmpty) {
+      if (optBuilder2.isPresent()) {
+        this.builder = optBuilder2.get();
+        this.isEmpty = false;
+      }
+    } else {
+      optBuilder2.map(this.builder::append);
+    }
+    return this;
+  }
+}
+*/
