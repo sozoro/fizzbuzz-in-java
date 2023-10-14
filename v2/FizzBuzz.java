@@ -49,16 +49,16 @@ class OptBuilder {
   }
 
   public OptBuilder accumulate(String str) {
-    this.optBuilder =
-      this.optBuilder.of(this.optBuilder.orElse(new StringBuilder()).append(str));
+    this.optBuilder = this.optBuilder
+      .of(this.optBuilder.orElse(new StringBuilder()).append(str));
     return this;
   }
 
   public OptBuilder combine(OptBuilder ob2) {
     Optional<StringBuilder> optBuilder2 = ob2.get();
-    this.optBuilder =
-      this.optBuilder.map(builder -> optBuilder2.map(builder::append).orElse(builder))
-                     .or(() -> optBuilder2);
+    this.optBuilder = this.optBuilder
+      .map(builder -> optBuilder2.map(builder::append).orElse(builder))
+      .or(() -> optBuilder2);
     return this;
   }
 }
